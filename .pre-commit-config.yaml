@@ -1,0 +1,33 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+# 1. 基础文件检查 (来自 pre-commit 官方)
+# ----------------------------------------------------
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.6.0  # 使用具体的版本号以保证稳定性
+  hooks:
+  - id: trailing-whitespace          # 移除行尾的多余空格
+  - id: end-of-file-fixer            # 确保文件以一个空行结尾
+  - id: check-yaml                   # 检查 YAML 文件语法是否正确
+  - id: check-json                   # 检查 JSON 文件语法是否正确
+  - id: check-toml                   # 检查 TOML 文件语法是否正确
+  - id: check-added-large-files      # 防止提交大文件 (默认 > 500KB)
+  - id: check-merge-conflict         # 防止提交带有合并冲突标记的文件
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  # Ruff version.
+  rev: v0.12.0
+  hooks:
+  # Run the linter.
+  - id: ruff-check
+    args: [ --fix ]
+  # Run the formatter.
+  - id: ruff-format
+
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.5.0
+  hooks:
+  - id: detect-secrets
+    args: ['--baseline', '.secrets.baseline']
+    exclude: package.lock.json

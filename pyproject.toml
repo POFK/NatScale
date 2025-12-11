@@ -9,6 +9,10 @@ authors = [
 dependencies = [
     "loguru>=0.7.0",
     "typer>=0.15.2",
+    "nats-py>=2.12.0",
+    "tqdm>=4.67.1",
+    "pyyaml>=6.0.3",
+    "faststream>=0.6.4",
 ]
 requires-python = ">=3.12"
 readme = "README.md"
@@ -107,7 +111,7 @@ addopts = [
     "--cov-append",           # 追加覆盖率数据，对于并行测试或多次运行很有用
     "--cov-report=term-missing", # 在终端显示覆盖率报告，并高亮未覆盖的行
     "--html=htmlcov/report.html", # 生成 HTML 格式的测试报告
-    "-n=auto",                # 自动根据 CPU 核心数并行执行测试 (来自 pytest-xdist)
+    "-n=4",                # 自动根据 CPU 核心数并行执行测试 (来自 pytest-xdist)
     "--color=yes",            # 强制输出彩色日志
 ]
 

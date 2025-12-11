@@ -3,13 +3,16 @@
 import tqdm
 import asyncio
 from loguru import logger
-from typing import Iterator, Dict, Any, Union
+from typing import Iterator, Dict, Any, List
 from faststream.nats import NatsBroker
 from nats.js.errors import APIError
 
 
 async def push(
-    data: Iterator[Dict[str, Any]], broker: NatsBroker, stream: str, subject: str
+    data: Iterator[Dict[str, Any]] | List[Dict[str, Any]],
+    broker: NatsBroker,
+    stream: str,
+    subject: str,
 ):
     await broker.connect()
     count = 0

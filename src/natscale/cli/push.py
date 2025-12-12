@@ -2,7 +2,6 @@
 
 import asyncio
 import typer
-import csv
 import json
 from pathlib import Path
 from typing import Iterator, Dict, Any

@@ -18,7 +18,7 @@
           packages = [
             pkgs.nats-server # 服务端
             pkgs.natscli     # 客户端工具 (命令是 'nats')
-            
+
             # 如果你也需要 Python 环境，可以在这里解开注释
             # pkgs.python3
           ];

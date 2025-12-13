@@ -10,14 +10,6 @@ from natscale.task.config import IterConfig
 from natscale.task.msg import parse_msg_json_pydantic
 
 
-def _helper_check_ack(ack_coro, data):
-    async def wrap():
-        logger.debug("send ack signal for data", data)
-        return await ack_coro()
-
-    return wrap
-
-
 def _ack_handler(ack_coro, loop):
     def handler():
         if loop and loop.is_running():
@@ -67,9 +59,7 @@ class NatsIterator:
         loop.run_forever()
 
     async def _run_nats(self, nc):
-        """仅负责 NATS 读取逻辑，nc 由外部传入或内部创建"""
         try:
-            # 连接逻辑 (略，如果 nc 已经连接则跳过)
             if not nc.is_connected:
                 await nc.connect(servers=[self.config.nats_server])
 

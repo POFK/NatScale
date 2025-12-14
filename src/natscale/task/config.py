@@ -9,4 +9,5 @@ class IterConfig(BaseModel):
     stream_name: str = "NATSCALE"
     durable_name: str = "ns_worker_group"
     auto_ack: bool = False
-    timeout: float = 600.0
+    timeout: float = 30.0
+    retry: int = 10

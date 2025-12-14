@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
-import queue
 import pytest
 import json
 from typing import List
-from unittest.mock import MagicMock, AsyncMock, patch
-from loguru import logger
+from unittest.mock import MagicMock, AsyncMock
 
 from natscale.task.config import IterConfig
 from natscale.task.iter import NatsIterator
@@ -51,6 +49,7 @@ class MockNatsConnector:
         return NatsIterator(self.config, nats_connector=self.nc)
 
 
+@pytest.mark.alpha
 def test_manual_ack_mode():
     """测试手动 ACK 模式：yield 出来的数据应该包含 ack handler"""
     cfg = IterConfig(auto_ack=False, **default_config)
@@ -74,6 +73,7 @@ def test_manual_ack_mode():
     ack.assert_called_once()
 
 
+@pytest.mark.alpha
 def test_auto_ack_logic():
     """测试自动 ACK 模式：Delayed Ack 机制"""
     cfg = IterConfig(auto_ack=True, **default_config)
@@ -94,6 +94,7 @@ def test_auto_ack_logic():
     conn.msg_ack(len(tasks) - 1).assert_called_once()
 
 
+@pytest.mark.alpha
 def test_iterator_timeout():
     """测试队列空时的超时退出"""
     cfg = IterConfig(auto_ack=False, **default_config)
@@ -105,6 +106,7 @@ def test_iterator_timeout():
     assert len(results) == 0
 
 
+@pytest.mark.alpha
 @pytest.mark.parametrize("error", [KeyboardInterrupt, ValueError])
 def test_auto_ack_when_manual_keyboard_interrupt_skips_ack(error):
     """

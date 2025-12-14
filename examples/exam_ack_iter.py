@@ -5,7 +5,7 @@ cfg = ns.Config(
     nats_server="nats://127.0.0.1:4222",
     subject="hpc.tasks.*",
     timeout=3,
-    retry = 4,
+    retry=4,
     auto_ack=False,
 )
 

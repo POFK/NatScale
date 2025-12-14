@@ -25,7 +25,8 @@ async def nats_stream_get_next(psub, timeout: float = 15.0, retry: int = 4):
         except NatsTimeoutError:
             retry_time += 1
             logger.debug(
-                f"[retry: {retry_time} / {retry}] get no signal from upstream NATS server in {timeout}s"
+                f"[retry: {retry_time} / {retry}] get no signal "
+                f"from upstream NATS server in {timeout}s"
             )
             pass
         except Exception as e:

@@ -44,16 +44,18 @@ import natscale as ns
 
 cfg = ns.Config(
     nats_server="nats://127.0.0.1:4222",
-    subject="ns.tasks.*",
-    timeout=60,
+    subject="netscale.tasks.*",
+    timeout=3,
+    retry = 4,
     auto_ack=False,
 )
 
 # manually do ack
-for data, done in ns.Iterator(cfg):
-    print(f"{data.id} --> {data}")
-    time.sleep(3)
-    done()
+with ns.Iterator(cfg) as tasks:
+    for data, done in tasks:
+        print(f"{data.id} --> {data}")
+        time.sleep(1)
+        done()
 ```
 
 Auto send an ACK signal to confirm that the task has been successfully received and processed.
@@ -61,18 +63,20 @@ Auto send an ACK signal to confirm that the task has been successfully received 
 ``` python
 import time
 import natscale as ns
+from natscale.task.iter import NatsIterator as Iterator
 
 cfg = ns.Config(
     nats_server="nats://127.0.0.1:4222",
-    subject="ns.tasks.*",
-    timeout=60,
+    subject="netscale.tasks.*",
+    timeout=3,
+    retry = 4,
     auto_ack=True,
 )
 
-for data in ns.Iterator(cfg):
-    print(f"{data.id} --> {data}")
-    time.sleep(3)
-
+with Iterator(cfg) as tasks:
+    for data in tasks:
+        print(f"{data.id} --> {data}")
+        time.sleep(1)
 ```
 
 

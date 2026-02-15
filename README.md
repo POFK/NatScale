@@ -18,7 +18,7 @@ nats-server -js
 ## create a NATS stream
 
 ``` sh
-nats stream add NATSCALE --subjects "hpc.tasks.>" --storage=file --ack --retention=work --discard new   --max-msgs 100000 --replicas 1
+nats stream add  --subjects "natscale.tasks.>" --storage=file --ack --retention=work --discard new   --max-msgs 1000000 --max-msg-size=-1 --max-age=-1 --max-msgs-per-subject=-1 --max-bytes=-1 --replicas 1 NATSCALE
 ```
 
 ## useful commands
@@ -45,6 +45,7 @@ import natscale as ns
 cfg = ns.Config(
     nats_server="nats://127.0.0.1:4222",
     subject="netscale.tasks.*",
+    durable_name="all_tasks",
     timeout=3,
     retry = 4,
     auto_ack=False,
@@ -67,7 +68,8 @@ from natscale.task.iter import NatsIterator as Iterator
 
 cfg = ns.Config(
     nats_server="nats://127.0.0.1:4222",
-    subject="netscale.tasks.*",
+    subject="netscale.tasks.task001",
+    durable_name="task001",
     timeout=3,
     retry = 4,
     auto_ack=True,
@@ -79,8 +81,12 @@ with Iterator(cfg) as tasks:
         time.sleep(1)
 ```
 
+## Note, the `durable_name` always should be set based on subject**
 
-
+nats stream 中使用 workqueue 时，如果只修改 subject 而不改动 customer 对应的 durable name, 这会导致
+subject依然使用customer初次定义时设置的 subject 值，从而使得新的 subject 失效。为了解决这一问题，不
+同任务在定义时，可以将 subject and durable_name 绑定，并以 task_id 进行赋值，从而解决 subject filter
+的问题, see `examples/debug_ack_iter.py`
 
 # template-pdm-base
 
